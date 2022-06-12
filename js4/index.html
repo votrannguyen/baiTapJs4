@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="javascript.js"></script>
+<style>
+  .img-content {
+    max-width: 300px;
+    height: 200px;
+  }
+  img {
+    width: 100%;
+  }
+  .content {
+    margin: 20px 0;
+    display: flex;
+  }
+  .text-content {
+    margin-left: 30px;
+  }
+  .headline-text {
+    background-color: blanchedalmond;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 800;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+    <h1 id="myBtn">MY NEWS<i class="fas fa-search"></i></h1>
+
+<!-- Trigger/Open The Modal -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+    </div>
+    
+    <label for="">Tìm kiếm</label>
+      <input type="text" id="input">
+      <button id="btn">Tìm kiếm</button>
+  </div>
+
+</div>
+<section class="posts-listing" id="posts-listing">
+    
+    
+    </section>
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+/// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var key = "6169caee7c2f4fca00b253eccbffe763&lang=en&max=10";
+ url = 'https://gnews.io/api/v4/top-headlines?&token='+key;
+fetch(url)
+    .then(function (response) {
+        return response.json()
+    })
+    .then(function (data) {
+        var html = data.articles.map(function(data) {
+            return `<div class="content">
+                        <div class="img-content"><img src="${data.image}" alt="${data.name}"></img></div>
+                        <div class="text-content">
+                            <a href=${data.url} target="_blank">
+                                ${data.title}
+                            </a>
+                            <p>${data.publishedAt}</p>
+                            <p>${data.content}</p>
+                        </div>
+                    </div>`
+        })
+        var htmls = html.join("");
+        document.getElementById("posts-listing").innerHTML = htmls; 
+})
+var myBtn = document.getElementById("btn");
+myBtn.onclick = function(){
+    var myInput = document.getElementById("input").value;
+    console.log(myInput);
+    var key = "6169caee7c2f4fca00b253eccbffe763&lang=en&max=10";
+    url = 'https://gnews.io/api/v4/search?q='+myInput+'&token='+key;
+fetch(url)
+    .then(function (response) {
+        return response.json()
+    })
+    .then(function (data) {
+        var html = data.articles.map(function(data) {
+            return `<div class="content">
+                        <div class="img-content"><img src="${data.image}" alt="${data.name}"></img></div>
+                        <div class="text-content">
+                            <a href=${data.url} target="_blank">
+                                ${data.title}
+                            </a>
+                            <p>${data.publishedAt}</p>
+                            <p>${data.content}</p>
+                        </div>
+                    </div>`
+        })
+        var htmls = html.join("");
+        document.getElementById("posts-listing").innerHTML = htmls; 
+})
+}
+</script>
+
+</body>
+</html>
